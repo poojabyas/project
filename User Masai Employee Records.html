@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Information</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: flex-start;
+            margin: 10%;
+            padding: 10%;
+        }
+
+        form {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .senior {
+            color: red;
+        }
+
+        .junior {
+            color: green;
+        }
+
+        .fresher {
+            color: blue;
+        }
+        h1{
+          color:rgb(22, 22, 180);
+          text-align: center;
+          margin-bottom: -18%;
+        }
+    </style>
+</head>
+<body>
+    <h1> Masai Employee Information</h1>
+    <div class="container">
+        <form id="employeeForm">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" required />
+            <br />
+            <label for="employeeId">Employee ID:</label><br>
+            <input type="text" id="employeeId" required />
+            <br />
+            <label for="department">Department:</label><br>
+            <select id="department" required>
+                <option value="frontend">Frontend</option>
+                <option value="backend">Backend</option>
+                <option value="Ops">Ops</option>
+                <option value="HR">HR</option>
+                <option value="IA">IA</option>
+            </select>
+            <br />
+            <label for="experience">Experience (in years):</label><br>
+            <input type="number" id="experience" required />
+            <br />
+            <label for="email">Email address:</label><br>
+            <input type="email" id="email" required />
+            <br />
+            <label for="mobile">Mobile Number:</label><br>
+            <input type="tel" id="mobile" required />
+            <br />
+            <br>
+            <button type="submit" style="background-color:rgb(22, 22, 180);color: white ;">Submit</button>
+        </form>
+              
+            <table >
+                <thead>
+                    <tr >
+                        <th>Name</th>
+                        <th>Employee ID</th>
+                        <th>Department</th>
+                        <th>Experience (years)</th>
+                        <th>Email Address</th>
+                        <th>Mobile Number</th>
+                        <th>Role</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('employeeForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get the values from the form
+            const name = document.getElementById('name').value;
+            const employeeId = document.getElementById('employeeId').value;
+            const department = document.getElementById('department').value;
+            const experience = parseInt(document.getElementById('experience').value);
+            const email = document.getElementById('email').value;
+            const mobile = document.getElementById('mobile').value;
+
+            // Determine the role based on experience
+            let role = '';
+            if (experience > 5) {
+                role = 'Senior';
+            } else if (experience >= 2 && experience <= 5) {
+                role = 'Junior';
+            } else {
+                role = 'Fresher';
+            }
+
+            // Create a new row in the table
+            const newRow = document.createElement('tr');
+
+            // Create and append the columns
+            const columns = ['name', 'employeeId', 'department', 'experience', 'email', 'mobile', 'role'];
+            columns.forEach(column => {
+                const newColumn = document.createElement('td');
+                newColumn.textContent = eval(column);
+                newRow.appendChild(newColumn);
+            });
+
+            // Create and append the delete button
+            const deleteColumn = document.createElement('td');
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', function() {
+                // Delete the row
+                newRow.remove();
+            });
+            deleteColumn.appendChild(deleteButton);
+            newRow.appendChild(deleteColumn);
+
+            // Append the new row to the table
+            document.getElementById('employeeList').appendChild(newRow);
+
+            // Reset the form
+            document.getElementById('employeeForm').reset();
+        });
+
+        function filterByDepartment() {
+            const selectedDepartment = document.getElementById('departmentFilter').value;
+            const rows = document.getElementById('employeeList').getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const departmentColumn = rows[i].getElementsByTagName('td')[2];
+                const showRow = selectedDepartment === 'all' || departmentColumn.textContent === selectedDepartment;
+                rows[i].style.display = showRow ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>
